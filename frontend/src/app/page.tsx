@@ -1,0 +1,58 @@
+'use client'
+
+import { useState } from 'react'
+
+export default function Home() {
+  const [status, setStatus] = useState('')
+  const [data, setData] = useState<any | null>(null)
+
+  const handleSend = async () => {
+    setStatus('Pošiljam podatke...')
+
+    const fingerprintData = {
+      userAgent: navigator.userAgent,
+      language: navigator.language,
+      platform: navigator.platform,
+      screen: {
+        width: window.screen.width,
+        height: window.screen.height,
+        colorDepth: window.screen.colorDepth
+      }
+    }
+
+    try {
+      const res = await fetch('http://localhost:8000/fingerprint', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(fingerprintData)
+      })
+
+      const result = await res.json()
+      setData(result)
+      setStatus('Podatki uspešno poslani!')
+    } catch (error) {
+      console.error('Napaka pri pošiljanju:', error)
+      setStatus('Napaka pri pošiljanju.')
+    }
+  }
+
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center p-8">
+      <h1 className="text-3xl font-bold mb-6">TraceBit – Zbiranje Fingerprint podatkov</h1>
+      <button
+        onClick={handleSend}
+        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+      >
+        Pošlji podatke
+      </button>
+      <p className="mt-4 text-lg">{status}</p>
+      {data && (
+        <pre className="mt-6 p-4 bg-gray-100 rounded max-w-xl w-full text-sm overflow-auto">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      )}
+    </main>
+  )
+}

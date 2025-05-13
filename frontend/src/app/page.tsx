@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import IntroSekcija from './component/intro'
+import FingerprintInfo from './component/FingerprintInfo'
 
 export default function Home() {
   const [status, setStatus] = useState('')
@@ -39,20 +41,27 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <h1 className="text-3xl font-bold mb-6">TraceBit – Zbiranje Fingerprint podatkov</h1>
-      <button
-        onClick={handleSend}
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-      >
-        Pošlji podatke
-      </button>
-      <p className="mt-4 text-lg">{status}</p>
-      {data && (
-        <pre className="mt-6 p-4 bg-gray-100 rounded max-w-xl w-full text-sm overflow-auto">
-          {JSON.stringify(data, null, 2)}
-        </pre>
-      )}
-    </main>
+    <div>
+      <IntroSekcija />
+      <FingerprintInfo />
+      
+      {/* <main className="flex min-h-screen flex-col items-center justify-center p-8">
+        <h1 className="text-3xl font-bold mb-6">TraceBit – Zbiranje Fingerprint podatkov</h1>
+        <button
+          onClick={handleSend}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+        >
+          Pošlji podatke
+        </button>
+        <p className="mt-4 text-lg">{status}</p>
+        {data && (
+          <pre className="mt-6 p-4 bg-gray-100 rounded max-w-xl w-full text-sm overflow-auto">
+            {JSON.stringify(data, null, 2)}
+          </pre>
+        )}
+      </main>
+      */}
+      
+    </div>
   )
 }

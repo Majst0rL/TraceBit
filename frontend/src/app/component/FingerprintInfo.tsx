@@ -1,3 +1,5 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\component\FingerprintInfo.tsx
+
 export default function FingerprintInfo() {
   const items = [
     {

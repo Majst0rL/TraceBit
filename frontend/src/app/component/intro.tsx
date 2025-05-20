@@ -1,3 +1,5 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\component\intro.tsx
+
 import Link from "next/link";
 
 export default function IntroSekcija() {

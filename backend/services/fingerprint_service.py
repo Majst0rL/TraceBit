@@ -2,7 +2,6 @@ import hashlib
 import json
 from supabase import create_client, Client
 
-# ❗️ PRAVA vrednost za SUPABASE_URL je oblike: https://xyz.supabase.co
 SUPABASE_URL = "https://wmzgrhamqifekgyngytd.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtemdyaGFtcWlmZWtneW5neXRkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzE1NTI3NCwiZXhwIjoyMDYyNzMxMjc0fQ.uXVgtJs9_2jFdTX2sKCcnfKRYtODvaUXXFrHils3HNI"
 

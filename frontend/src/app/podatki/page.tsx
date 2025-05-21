@@ -1,65 +1,26 @@
-'use client';
+'use client'
 
 import { useState } from 'react';
 import { collectFingerprintData } from '../utils/fingerprintCollector';
 import RenderJsonAsForm from '../component/JSONkotForma';
 
-interface ParsedUserAgent {
-  browser: string;
-  os: string;
-  device: string;
-  engine: string;
-  fullUserAgent: string;
-}
-
-interface FingerprintData {
-  parsedUserAgent: ParsedUserAgent;
-  language: string;
-  platform: string;
-  timezone: string;
-  hardwareConcurrency: number;
-  deviceMemory: number | null;
-  screen: {
-    width: number;
-    height: number;
-    colorDepth: number;
-  };
-  webGL: {
-    supported: boolean;
-    renderer: string;
-    vendor: string;
-  };
-  capabilities: {
-    cookiesEnabled: boolean;
-    localStorage: boolean;
-    sessionStorage: boolean;
-    indexedDB: boolean;
-    serviceWorker: boolean;
-    webRTC: boolean;
-    touchSupport: boolean;
-    online: boolean;
-  };
-  orientation: string;
-}
-
-
 interface FingerprintResponse {
   status: string;
   message: string;
-  data: FingerprintData;
+  data: any;
 }
 
 export default function UserData() {
   const [isProfilingStarted, setIsProfilingStarted] = useState(false);
   const [response, setResponse] = useState<FingerprintResponse | null>(null);
-  const [fingerprintData, setFingerprintData] = useState<FingerprintData | null>(null);
+  const [fingerprintData, setFingerprintData] = useState<any | null>(null);
 
   const handleProfiling = async () => {
     const data = collectFingerprintData();
     setFingerprintData(data);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fingerprint`, {
+      const res = await fetch('http://localhost:8000/api/fingerprint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -83,8 +44,7 @@ export default function UserData() {
 
         <button 
           onClick={handleProfilingStart}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-lg mb-6"
-        >
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg mb-6">
           Start Profiling
         </button>
 
@@ -93,9 +53,10 @@ export default function UserData() {
             <div>
               <p className="mb-4">Collected data:</p>
 
+              {/* LOCAL fingerprintData display */}
               {fingerprintData && (
                 <>
-                  {fingerprintData.parsedUserAgent.fullUserAgent && (
+                  {fingerprintData.parsedUserAgent?.fullUserAgent && (
                     <pre className="bg-white p-3 rounded overflow-auto text-sm break-words whitespace-pre-wrap mb-4">
                       {fingerprintData.parsedUserAgent.fullUserAgent}
                     </pre>
@@ -111,6 +72,7 @@ export default function UserData() {
                 Send Data to Server
               </button>
 
+              {/* SERVER response */}
               {response && (
                 <div className="mt-6 p-4 bg-gray-200 rounded-lg">
                   <h3 className="font-semibold">Server Response:</h3>
@@ -119,9 +81,10 @@ export default function UserData() {
                       <p>Status: {response.status}</p>
                       <p>Message: {response.message}</p>
 
-                      {response.data.parsedUserAgent.fullUserAgent && (
+                      {/* SERVER full userAgent preview */}
+                      {(response.data as any)?.parsedUserAgent?.fullUserAgent && (
                         <pre className="bg-white p-3 rounded overflow-auto text-sm break-words whitespace-pre-wrap mb-4">
-                          {response.data.parsedUserAgent.fullUserAgent}
+                          {(response.data as any).parsedUserAgent.fullUserAgent}
                         </pre>
                       )}
 

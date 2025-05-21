@@ -34,6 +34,13 @@ export const collectFingerprintData = () => {
       height: window.screen.height,
       colorDepth: window.screen.colorDepth,
     },
+    window: {
+      innerWidth: window.innerWidth,    // viewport width (excludes browser chrome, scrollbar)
+      innerHeight: window.innerHeight,  // viewport height
+      outerWidth: window.outerWidth,    // entire browser window width (including toolbars)
+      outerHeight: window.outerHeight,  // entire browser window height
+      devicePixelRatio: window.devicePixelRatio, // ratio of physical pixels to CSS pixels
+    },
     webGL: {
       supported: !!gl,
       ...webGLInfo

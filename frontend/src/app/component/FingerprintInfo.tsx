@@ -3,22 +3,22 @@
 export default function FingerprintInfo() {
   const items = [
     {
-      title: "Kaj je prstni odtis brskalnika?",
-      desc: "Prstni odtis brskalnika je edinstven profil, zbran o tvoji napravi in brskalniku, ki se uporablja za sledenje tvoji spletni aktivnosti na različnih spletnih straneh."
+      title: "What is a browser fingerprint?",
+      desc: "A browser fingerprint is a unique profile collected about your device and browser that is used to track your online activity across different websites."
     },
     {
-      title: "Kako deluje",
-      desc: "Združuje podatke iz nastavitev brskalnika, vtičnikov, ločljivosti zaslona, pisav in drugih konfiguracij za ustvarjanje edinstvene identifikacijske oznake."
+      title: "How it works",
+      desc: "It combines data from your browser settings, plugins, screen resolution, fonts, and other configurations to create a unique identification tag."
     },
     {
-      title: "Zakaj je to pomembno",
-      desc: "Prstni odtis se lahko uporablja za ciljno oglaševanje, varnostne namene ali za povezovanje tvoje aktivnosti tudi, če izbrišeš piškotke."
+      title: "Why it matters",
+      desc: "A fingerprint can be used for targeted advertising, security purposes, or to link your activity even if you delete cookies."
     },
   ];
 
   return (
     <section className="py-16 px-6 text-center">
-      <h2 className="text-2xl font-bold mb-12">Razumevanje prstnega odtisa brskalnika</h2>
+      <h2 className="text-2xl font-bold mb-12">Understanding browser fingerprinting</h2>
       <div className="grid md:grid-cols-3 gap-8">
         {items.map(({ title, desc }, idx) => (
           <div key={idx} className="bg-white p-6 shadow rounded-lg">

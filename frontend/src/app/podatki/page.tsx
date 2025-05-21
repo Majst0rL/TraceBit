@@ -5,61 +5,26 @@ import { collectFingerprintData } from '../utils/fingerprintCollector';
 import RenderJsonAsForm from '../component/JSONkotForma';
 import Link from 'next/link';
 
-interface ParsedUserAgent {
-  browser: string;
-  os: string;
-  device: string;
-  engine: string;
-  fullUserAgent: string;
-}
-
-interface FingerprintData {
-  parsedUserAgent: ParsedUserAgent;
-  language: string;
-  platform: string;
-  timezone: string;
-  hardwareConcurrency: number;
-  deviceMemory: number | null;
-  screen: {
-    width: number;
-    height: number;
-    colorDepth: number;
-  };
-  webGL: {
-    supported: boolean;
-    renderer: string;
-    vendor: string;
-  };
-  capabilities: {
-    cookiesEnabled: boolean;
-    localStorage: boolean;
-    sessionStorage: boolean;
-    indexedDB: boolean;
-    serviceWorker: boolean;
-    webRTC: boolean;
-    touchSupport: boolean;
-    online: boolean;
-  };
-  orientation: string;
-}
 interface FingerprintResponse {
   status: string;
   message: string;
-  data: FingerprintData;
+  data: any;
 }
 
 export default function UserData() {
   const [isProfilingStarted, setIsProfilingStarted] = useState(false);
   const [response, setResponse] = useState<FingerprintResponse | null>(null);
-  const [fingerprintData, setFingerprintData] = useState<FingerprintData | null>(null);
+
+  const [fingerprintData, setFingerprintData] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
+
 
 
 
   const sendData = async () => {
     const data=fingerprintData;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/fingerprint`, {
+      const res = await fetch('http://localhost:8000/api/fingerprint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
@@ -103,7 +68,7 @@ export default function UserData() {
               {/* LOCAL fingerprintData display */}
               {fingerprintData && (
                 <>
-                  {fingerprintData.parsedUserAgent.fullUserAgent && (
+                  {fingerprintData.parsedUserAgent?.fullUserAgent && (
                     <pre className="bg-white p-3 rounded overflow-auto text-sm break-words whitespace-pre-wrap mb-4">
                       {fingerprintData.parsedUserAgent.fullUserAgent}
                     </pre>

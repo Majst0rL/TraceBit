@@ -2,17 +2,13 @@
 
 'use client';
 
-import { useState } from 'react';
-
-interface FingerprintResponse {
-  status: string;
-  message: string;
-  data: any; // You can refine this type if desired
+interface RenderJsonAsFormProps {
+  data: unknown;
 }
 
 // Reusable recursive component for rendering read-only form from JSON
-const RenderJsonAsForm = ({ data }: { data: any }) => {
-  const renderFields = (obj: any, parentKey = '') => {
+const RenderJsonAsForm = ({ data }: RenderJsonAsFormProps) => {
+  const renderFields = (obj: Record<string, any>, parentKey = '') => {
     return Object.entries(obj).map(([key, value]) => {
       const fullKey = parentKey ? `${parentKey}.${key}` : key;
 
@@ -43,7 +39,7 @@ const RenderJsonAsForm = ({ data }: { data: any }) => {
     });
   };
 
-  return <form className="space-y-2">{renderFields(data)}</form>;
+  return <form className="space-y-2">{renderFields(data as Record<string, any>)}</form>;
 };
 
 export default RenderJsonAsForm;

@@ -1,19 +1,21 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\podatki\page.tsx
+
 'use client'
 
 import { useState } from 'react';
-import { collectFingerprintData } from '../utils/fingerprintCollector';
+import { collectFingerprintData, FingerprintData } from '../utils/fingerprintCollector';
 import RenderJsonAsForm from '../component/JSONkotForma';
 
 interface FingerprintResponse {
   status: string;
   message: string;
-  data: any;
+  data: FingerprintData;
 }
 
 export default function UserData() {
   const [isProfilingStarted, setIsProfilingStarted] = useState(false);
   const [response, setResponse] = useState<FingerprintResponse | null>(null);
-  const [fingerprintData, setFingerprintData] = useState<any | null>(null);
+  const [fingerprintData, setFingerprintData] = useState<FingerprintData | null>(null);
 
   const handleProfiling = async () => {
     const data = collectFingerprintData();
@@ -26,7 +28,7 @@ export default function UserData() {
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const result: FingerprintResponse = await res.json();
       setResponse(result);
     } catch (error) {
       console.error('Error:', error);
@@ -56,7 +58,7 @@ export default function UserData() {
               {/* LOCAL fingerprintData display */}
               {fingerprintData && (
                 <>
-                  {fingerprintData.parsedUserAgent?.fullUserAgent && (
+                  {fingerprintData.parsedUserAgent.fullUserAgent && (
                     <pre className="bg-white p-3 rounded overflow-auto text-sm break-words whitespace-pre-wrap mb-4">
                       {fingerprintData.parsedUserAgent.fullUserAgent}
                     </pre>
@@ -82,9 +84,9 @@ export default function UserData() {
                       <p>Message: {response.message}</p>
 
                       {/* SERVER full userAgent preview */}
-                      {(response.data as any)?.parsedUserAgent?.fullUserAgent && (
+                      {response.data.parsedUserAgent.fullUserAgent && (
                         <pre className="bg-white p-3 rounded overflow-auto text-sm break-words whitespace-pre-wrap mb-4">
-                          {(response.data as any).parsedUserAgent.fullUserAgent}
+                          {response.data.parsedUserAgent.fullUserAgent}
                         </pre>
                       )}
 

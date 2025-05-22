@@ -6,9 +6,15 @@ import { useState } from 'react'
 import IntroSekcija from './component/intro'
 import FingerprintInfo from './component/FingerprintInfo'
 
+interface FingerprintResponse {
+  hash: string
+  timestamp: string
+  // Dodaj tukaj dodatne polja, če jih vrača tvoj backend
+}
+
 export default function Home() {
-  const [status, setStatus] = useState('')
-  const [data, setData] = useState<any | null>(null)
+  const [status, setStatus] = useState<string>('')
+  const [data, setData] = useState<FingerprintResponse | null>(null)
 
   const handleSend = async () => {
     setStatus('Pošiljam podatke...')
@@ -33,7 +39,7 @@ export default function Home() {
         body: JSON.stringify(fingerprintData)
       })
 
-      const result = await res.json()
+      const result: FingerprintResponse = await res.json()
       setData(result)
       setStatus('Podatki uspešno poslani!')
     } catch (error) {
@@ -46,8 +52,8 @@ export default function Home() {
     <div>
       <IntroSekcija />
       <FingerprintInfo />
-      
-      {/* <main className="flex min-h-screen flex-col items-center justify-center p-8">
+
+      <main className="flex min-h-screen flex-col items-center justify-center p-8">
         <h1 className="text-3xl font-bold mb-6">TraceBit – Zbiranje Fingerprint podatkov</h1>
         <button
           onClick={handleSend}
@@ -62,8 +68,6 @@ export default function Home() {
           </pre>
         )}
       </main>
-      */}
-      
     </div>
   )
 }

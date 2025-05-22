@@ -1,25 +1,27 @@
-//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\component\JSONkotForma.tsx
-
 'use client';
 
-interface RenderJsonAsFormProps {
+interface JsonRenderProps {
   data: unknown;
 }
 
 // Reusable recursive component for rendering read-only form from JSON
-const RenderJsonAsForm = ({ data }: RenderJsonAsFormProps) => {
-  const renderFields = (obj: Record<string, any>, parentKey = '') => {
+const RenderJsonAsForm = ({ data }: JsonRenderProps) => {
+  const renderFields = (obj: Record<string, unknown>, parentKey = '') => {
     return Object.entries(obj).map(([key, value]) => {
       const fullKey = parentKey ? `${parentKey}.${key}` : key;
 
-      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
         return (
           <div key={fullKey} className="mb-4">
             <label className="block text-gray-800 font-semibold mb-2 capitalize">
               {key}
             </label>
             <div className="pl-4 border-l-2 border-gray-300">
-              {renderFields(value, fullKey)}
+              {renderFields(value as Record<string, unknown>, fullKey)}
             </div>
           </div>
         );
@@ -39,7 +41,7 @@ const RenderJsonAsForm = ({ data }: RenderJsonAsFormProps) => {
     });
   };
 
-  return <form className="space-y-2">{renderFields(data as Record<string, any>)}</form>;
+  return <form className="space-y-2">{renderFields(data as Record<string, unknown>)}</form>;
 };
 
 export default RenderJsonAsForm;

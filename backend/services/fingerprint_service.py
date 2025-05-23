@@ -1,3 +1,5 @@
+#C:\UNI\DProject\tracebit\TraceBit\backend\services\fingerprint_service.py
+
 import hashlib
 import json
 from supabase import create_client, Client

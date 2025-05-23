@@ -1,3 +1,5 @@
+# C:\UNI\DProject\tracebit\TraceBit\backend\routers\fingerprint.py
+
 from fastapi import APIRouter, Request
 from services.fingerprint_service import (
     generate_fingerprint_hash,

@@ -1,3 +1,5 @@
+#C:\UNI\DProject\tracebit\TraceBit\backend\main.py
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.fingerprint import router as fingerprint_router
@@ -7,7 +9,7 @@ app = FastAPI()
 # 🌐 Dovoli CORS za frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "https://tracebit.onrender.com"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

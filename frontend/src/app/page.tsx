@@ -9,7 +9,6 @@ import FingerprintInfo from './component/FingerprintInfo'
 interface FingerprintResponse {
   hash: string
   timestamp: string
-  // Dodaj tukaj dodatne polja, če jih vrača tvoj backend
 }
 
 export default function Home() {
@@ -31,7 +30,7 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('http://localhost:8000/fingerprint', {
+      const res = await fetch('https://tracebit-back.onrender.com/fingerprint', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

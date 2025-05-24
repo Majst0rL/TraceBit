@@ -22,7 +22,7 @@ export default function UserData() {
     setFingerprintData(data);
 
     try {
-      const res = await fetch('https://tracebit-back.onrender.com/', {
+      const res = await fetch('https://tracebit-back.onrender.com/api/fingerprint', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

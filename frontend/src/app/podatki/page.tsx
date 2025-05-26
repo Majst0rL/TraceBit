@@ -23,7 +23,7 @@ export default function UserData() {
   const sendData = async () => {
     const data=fingerprintData;
     try {
-      const res = await fetch("http://localhost:8000/api/fingerprint", {
+      const res = await fetch("https://tracebit-back.onrender.com/api/fingerprint", {
         //https://tracebit-back.onrender.com/api/fingerprint
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

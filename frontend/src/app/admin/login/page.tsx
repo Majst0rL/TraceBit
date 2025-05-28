@@ -26,17 +26,17 @@ export default function AdminLogin() {
         localStorage.setItem('tracebit_token', data.access_token)
         router.push('/admin')
       } else {
-        setError(data.detail || 'Napaka pri prijavi')
+        setError(data.detail || 'Login failed')
       }
     } catch {
-      setError('Napaka v omrežju ali strežniku')
+      setError('Network or server error')
     }
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center">
       <div className="bg-white p-8 shadow rounded w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-4">Admin Prijava</h1>
+        <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
         <input
           type="email"
           placeholder="Email"
@@ -46,7 +46,7 @@ export default function AdminLogin() {
         />
         <input
           type="password"
-          placeholder="Geslo"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full mb-4 p-2 border border-gray-300 rounded"
@@ -56,7 +56,7 @@ export default function AdminLogin() {
           onClick={handleLogin}
           className="w-full bg-indigo-600 text-white p-2 rounded hover:bg-indigo-700"
         >
-          Prijava
+          Login
         </button>
       </div>
     </main>

@@ -1,19 +1,24 @@
 //C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\admin\components\FingerprintTable.tsx
 
-'use client'
-import { useEffect, useState } from 'react'
+interface Fingerprint {
+  fingerprint_hash: string;
+  browser_name: string;
+  os_name: string;
+  gpu_renderer: string;
+  screen_resolution: string;
+}
 
-export default function FingerprintTable({ data }: { data: any[] }) {
+export default function FingerprintTable({ data }: { data: Fingerprint[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white shadow rounded">
         <thead>
           <tr className="bg-gray-100">
             <th className="px-4 py-2 text-left">Hash</th>
-            <th className="px-4 py-2 text-left">Brskalnik</th>
+            <th className="px-4 py-2 text-left">Browser</th>
             <th className="px-4 py-2 text-left">OS</th>
             <th className="px-4 py-2 text-left">GPU</th>
-            <th className="px-4 py-2 text-left">Resolucija</th>
+            <th className="px-4 py-2 text-left">Resolution</th>
           </tr>
         </thead>
         <tbody>

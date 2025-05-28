@@ -1,11 +1,15 @@
 #C:\UNI\DProject\tracebit\TraceBit\backend\services\fingerprint_service.py
 
+import os
 import hashlib
 import json
 from supabase import create_client, Client
+from dotenv import load_dotenv
 
-SUPABASE_URL = "https://wmzgrhamqifekgyngytd.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtemdyaGFtcWlmZWtneW5neXRkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzE1NTI3NCwiZXhwIjoyMDYyNzMxMjc0fQ.uXVgtJs9_2jFdTX2sKCcnfKRYtODvaUXXFrHils3HNI"
+
+load_dotenv()
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 

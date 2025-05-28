@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { collectFingerprintData, FingerprintData } from '../utils/fingerprintCollector';
 import RenderJsonAsForm from '../component/JSONkotForma';
+import { BACKEND_URL } from '../../lib/api'
 
 interface FingerprintResponse {
   status: string;
@@ -22,7 +23,7 @@ export default function UserData() {
     setFingerprintData(data);
 
     try {
-      const res = await fetch('https://tracebit-back.onrender.com/api/fingerprint', {
+      const res = await fetch(`${BACKEND_URL}/api/fingerprint`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

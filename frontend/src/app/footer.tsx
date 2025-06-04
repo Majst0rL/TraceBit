@@ -1,47 +1,38 @@
-//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\footer.tsx
-
 export default function Footer() {
   return (
-    <footer className="bg-gray-100 py-10 text-sm text-gray-600">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-4 gap-6">
-        <div>
-          <h4 className="font-bold mb-2 text-gray-800">About Us</h4>
-          <ul>
-            <li><a href="/about" className="hover:underline">Company Info</a></li>
-            <li><a href="/team" className="hover:underline">Our Team</a></li>
-            <li><a href="/contact" className="hover:underline">Contact</a></li>
+    <footer className="bg-gray-100 py-10 text-sm text-gray-600" aria-label="Footer">
+      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8">
+        {/* About & Legal Section */}
+        <section aria-labelledby="footer-about-legal">
+          <h4 id="footer-about-legal" className="font-bold mb-3 text-gray-800">About & Legal</h4>
+          <ul className="space-y-2">
+            <li><a href="/pages/about" className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">About Us</a></li>
+            <li><a href="/pages/disclaimer" className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Disclaimer</a></li>
           </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-2 text-gray-800">Privacy</h4>
-          <ul>
-            <li><a href="/privacy-policy" className="hover:underline">Privacy Policy</a></li>
-            <li><a href="/cookie-policy" className="hover:underline">Cookie Policy</a></li>
+        </section>
+
+        {/* Privacy Section */}
+        <section aria-labelledby="footer-privacy">
+          <h4 id="footer-privacy" className="font-bold mb-3 text-gray-800">Privacy</h4>
+          <ul className="space-y-2">
+            <li><a href="/pages/privacy-policy" className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Privacy and Cookie Policy</a></li>
           </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-2 text-gray-800">Terms</h4>
-          <ul>
-            <li><a href="/terms-of-service" className="hover:underline">Terms of Service</a></li>
-            <li><a href="/acceptable-use" className="hover:underline">Acceptable Use Policy</a></li>
+        </section>
+
+        {/* Terms Section */}
+        <section aria-labelledby="footer-terms">
+          <h4 id="footer-terms" className="font-bold mb-3 text-gray-800">Terms</h4>
+          <ul className="space-y-2">
+            <li><a href="/pages/acceptable-use" className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Acceptable Use Policy</a></li>
+            <li><a href="/pages/terms_and_conditions" className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded">Terms and Conditions</a></li>
           </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-2 text-gray-800">Disclaimer</h4>
-          <ul>
-            <li><a href="/disclaimer" className="hover:underline">Legal Disclaimer</a></li>
-            <li><a href="/liability" className="hover:underline">Liability Notice</a></li>
-          </ul>
-        </div>
+        </section>
       </div>
-      <div className="text-center mt-10 text-gray-500 border-t pt-6">
-        <p>© 2024 BrowserFingerprint Inc. All rights reserved.</p>
-        <p className="mt-2">
-          <a href="/privacy-policy" className="hover:underline mx-2">Privacy Policy</a>|
-          <a href="/terms-of-service" className="hover:underline mx-2">Terms of Service</a>|
-          <a href="/contact" className="hover:underline mx-2">Contact Us</a>
-        </p>
+
+      <div className="max-w-6xl mx-auto px-6 mt-10 border-t border-gray-300 pt-6 text-center text-gray-500">
+        <p>© 2025 TraceBit All rights reserved.</p>
       </div>
     </footer>
+
   );
 }

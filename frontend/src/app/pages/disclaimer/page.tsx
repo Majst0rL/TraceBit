@@ -18,7 +18,7 @@ export default function Disclaimer() {
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">2. No Warranties</h2>
         <p className="mb-4">
-          The TraceBit service is provided on an "as is" and "as available" basis. We make no warranties or representations, either express or implied, regarding the operation or availability of the service, or that it will be error-free, uninterrupted, or secure.
+          The TraceBit service is provided on an as is and as available basis. We make no warranties or representations, either express or implied, regarding the operation or availability of the service, or that it will be error-free, uninterrupted, or secure.
         </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">3. Limitation of Liability</h2>

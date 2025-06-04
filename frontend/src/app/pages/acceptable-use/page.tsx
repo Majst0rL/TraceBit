@@ -12,7 +12,7 @@ export default function AcceptableUsePolicy() {
         <p className="mb-4">Effective Date: June 1, 2025</p>
 
         <p className="mb-4">
-          At TraceBit, we are committed to transparency, user education, and responsible use of fingerprinting technology. This Acceptable Use Policy ("Policy") describes the permitted and prohibited uses of our service.
+          At TraceBit, we are committed to transparency, user education, and responsible use of fingerprinting technology. This Acceptable Use Policy (Policy) describes the permitted and prohibited uses of our service.
         </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">Purpose of TraceBit</h2>

@@ -17,8 +17,8 @@ export default function PrivacyAndCookiePolicy() {
         {/* Privacy Policy Section */}
         <section>
           <p className="mb-4">
-            TraceBit ("we", "our", or "us") values your privacy. This policy explains how we collect, use, disclose, and safeguard your information when you use our fingerprinting service at{' '}
-            <strong>tracebit.onrender.com</strong> and its related API or SDK offerings (the "Service").
+            TraceBit (we, our, or us) values your privacy. This policy explains how we collect, use, disclose, and safeguard your information when you use our fingerprinting service at 
+            <strong>tracebit.onrender.com</strong> and its related API or SDK offerings (the Service).
           </p>
 
           <h2 className="text-2xl font-semibold mt-6 mb-2">1. Information We Collect</h2>
@@ -74,7 +74,7 @@ export default function PrivacyAndCookiePolicy() {
             <li>File a complaint with a data protection authority</li>
           </ul>
           <p className="mb-4">
-            You can request data access or deletion by emailing us at{' '}
+            You can request data access or deletion by emailing us at 
             <a href="mailto:default@gmail.com" className="text-blue-600 underline">
               default@gmail.com
             </a>
@@ -105,7 +105,7 @@ export default function PrivacyAndCookiePolicy() {
             You can control or block cookies and similar technologies by adjusting your browser or device settings. Please note that disabling certain features may impact the functionality or accuracy of the Service.
           </p>
           <p className="mb-4">
-            For more information on managing cookies, please visit{' '}
+            For more information on managing cookies, please visit 
             <a href="https://www.aboutcookies.org/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
               aboutcookies.org
             </a>
@@ -125,7 +125,7 @@ export default function PrivacyAndCookiePolicy() {
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">10. Contact Us</h2>
         <p className="mb-4">
-          If you have any questions or concerns about this policy, please email us at{' '}
+          If you have any questions or concerns about this policy, please email us at 
           <a href="mailto:default@gmail.com" className="text-blue-600 underline">
             default@gmail.com
           </a>

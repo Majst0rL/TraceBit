@@ -5,7 +5,7 @@ export default function AcceptableUsePolicy() {
     <>
       <Head>
         <title>Acceptable Use Policy | TraceBit</title>
-        <meta name="description" content="Read TraceBit’s Acceptable Use Policy outlining responsible and ethical usage of our fingerprinting technology." />
+        <meta name="description" content="Read TraceBits Acceptable Use Policy outlining responsible and ethical usage of our fingerprinting technology." />
       </Head>
       <main className="max-w-3xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-4">Acceptable Use Policy</h1>
@@ -41,7 +41,7 @@ export default function AcceptableUsePolicy() {
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">Your Responsibility</h2>
         <p className="mb-4">
-          If you embed or integrate TraceBit’s code or use our data in another system, you are fully responsible for ensuring that its use complies with all applicable laws and ethical standards. This includes clearly disclosing the use of fingerprinting to end-users and obtaining valid consent where required.
+          If you embed or integrate TraceBits code or use our data in another system, you are fully responsible for ensuring that its use complies with all applicable laws and ethical standards. This includes clearly disclosing the use of fingerprinting to end-users and obtaining valid consent where required.
         </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">Enforcement</h2>

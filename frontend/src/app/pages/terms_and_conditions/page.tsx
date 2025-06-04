@@ -12,7 +12,7 @@ export default function Terms() {
         <p className="mb-4">Effective Date: June 1, 2025</p>
 
         <p className="mb-4">
-          Welcome to TraceBit ("we", "our", or "us"). By accessing or using our fingerprinting web service (the "Service"), you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our Service.
+          Welcome to TraceBit (we, our, or us). By accessing or using our fingerprinting web service (the Service), you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our Service.
         </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">1. About Our Service</h2>
@@ -80,7 +80,7 @@ export default function Terms() {
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">8. Changes to These Terms</h2>
         <p className="mb-4">
-          We may revise these Terms at any time. We will update the "Effective Date" at the top of this page when changes occur. You are encouraged to review the Terms periodically.
+          We may revise these Terms at any time. We will update the Effective Date at the top of this page when changes occur. You are encouraged to review the Terms periodically.
         </p>
 
         <h2 className="text-2xl font-semibold mt-6 mb-2">9. Contact Us</h2>

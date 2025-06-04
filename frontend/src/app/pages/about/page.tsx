@@ -19,7 +19,7 @@ export default function About() {
         </p>
 
         <p className="mb-4">
-          Our service is built with transparency and compliance in mind, aiming to empower developers with powerful tools while respecting users' rights and choices.
+          Our service is built with transparency and compliance in mind, aiming to empower developers with powerful tools while respecting users rights and choices.
         </p>
 
         <h2 className="text-2xl font-semibold mt-8 mb-3">Our Mission</h2>
@@ -29,7 +29,7 @@ export default function About() {
 
         <h2 className="text-2xl font-semibold mt-8 mb-3">Contact Us</h2>
         <p>
-          Have questions or feedback? Feel free to reach out at{' '}
+          Have questions or feedback? Feel free to reach out at 
           <a href="mailto:default@gmail.com" className="text-blue-600 underline">default@gmail.com</a>.
         </p>
       </main>

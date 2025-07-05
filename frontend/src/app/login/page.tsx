@@ -35,8 +35,17 @@ export default function LoginPage() {
           router.push('/')
         }
       } else {
-        setError(data.detail || 'Login failed.')
+        if (typeof data.detail === 'string') {
+          setError(data.detail)
+        } else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
+          setError(data.detail[0].msg)
+        } else if (typeof data.detail === 'object' && data.detail?.msg) {
+          setError(data.detail.msg)
+        } else {
+          setError('Login failed.')
+        }
       }
+
     } catch {
       setError('Network or server error.')
     }

@@ -5,13 +5,13 @@
 import { useState } from 'react'
 
 export default function ForgotPasswordPage() {
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState('')
-  const [code, setCode] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+  const [step, setStep] = useState<number>(1)
+  const [email, setEmail] = useState<string>('')
+  const [code, setCode] = useState<string>('')
+  const [newPassword, setNewPassword] = useState<string>('')
+  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [message, setMessage] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -27,8 +27,8 @@ export default function ForgotPasswordPage() {
       if (!res.ok) throw new Error(data.detail || 'Failed to send code')
       setMessage('Code sent to your email.')
       setStep(2)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError((err as Error).message)
     }
   }
 
@@ -44,8 +44,8 @@ export default function ForgotPasswordPage() {
       if (!res.ok) throw new Error(data.detail || 'Invalid code')
       setMessage('Code verified. Please enter your new password.')
       setStep(3)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError((err as Error).message)
     }
   }
 
@@ -65,8 +65,8 @@ export default function ForgotPasswordPage() {
       if (!res.ok) throw new Error(data.detail || 'Failed to reset password')
       setMessage('Password successfully reset. You can now log in.')
       setStep(4)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err) {
+      setError((err as Error).message)
     }
   }
 

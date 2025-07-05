@@ -1,5 +1,4 @@
-// REMOVE unused imports
-// ❌ import { useEffect, useState } from 'react'
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\admin\components\StatsCards.tsx
 
 interface Stats {
   total_fingerprints: number;

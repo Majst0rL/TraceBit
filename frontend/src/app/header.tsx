@@ -40,7 +40,7 @@ export default function Navbar() {
             <span className="text-white text-xl">👤</span>
           </div>
         ) : (
-          <Link href="/admin/login" className="text-blue-400">Login</Link>
+          <Link href="/login" className="text-blue-400">Login</Link>
         )}
       </div>
     </nav>

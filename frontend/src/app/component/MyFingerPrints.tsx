@@ -1,9 +1,10 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\component\MyFingerPrints.tsx
+
 'use client'
 
 import { useEffect, useState } from 'react'
 import FingerprintTable from '../admin/components/FingerprintTable'
 import { useRouter } from 'next/navigation'
-import { jwtDecode } from 'jwt-decode'
 
 interface FingerprintEntry {
   fingerprint_hash: string
@@ -25,23 +26,19 @@ export default function MyFingerprints() {
       return
     }
 
-    // Optionally decode token or get user id from context if available
-    // For example, if token is JWT:
-    // const userId = decodeJWT(token).userId
-
     const headers = { Authorization: `Bearer ${token}` }
     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/fingerprints/my`, { headers })
-    .then(res => {
+      .then(res => {
         if (!res.ok) throw new Error('Unauthorized or fetch error');
         return res.json();
-    })
-    .then(data => {
+      })
+      .then(data => {
         setFingerprints(data);
         setLoading(false);
-    })
-    .catch(() => {
+      })
+      .catch(() => {
         router.push('/login');
-    });
+      });
 
   }, [router])
 

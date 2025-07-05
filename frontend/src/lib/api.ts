@@ -1,1 +1,1 @@
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://tracebit-back.onrender.com'
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'

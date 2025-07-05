@@ -30,7 +30,7 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('https://tracebit-back.onrender.com/api/fingerprint', {
+      const res = await fetch('http://localhost:8000/api/fingerprint', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,3 +1,5 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\utils\fingerprintCollector.ts
+
 import * as UAParser from 'ua-parser-js';
 
 export interface FingerprintData {

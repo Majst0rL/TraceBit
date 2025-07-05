@@ -5,6 +5,8 @@
 import { useState } from 'react'
 import IntroSekcija from './component/intro'
 import FingerprintInfo from './component/FingerprintInfo'
+import { BACKEND_URL } from '../lib/api'
+
 
 interface FingerprintResponse {
   hash: string
@@ -30,13 +32,14 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('http://localhost:8000/api/fingerprint', {
+      const res = await fetch(`${BACKEND_URL}/api/fingerprint`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(fingerprintData)
       })
+
 
       const result: FingerprintResponse = await res.json()
       setData(result)

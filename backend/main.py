@@ -6,14 +6,17 @@ from routers.fingerprint import router as fingerprint_router
 from routers import admin as admin_router
 from routers import auth as auth_router
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 app = FastAPI()
 
-# 🌐 Dovoli CORS za frontend
+# Frontend URL for CORS
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","https://localhost:3000"],
+    allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
     allow_credentials=True

@@ -13,7 +13,7 @@ export default function ConfirmEmailPage() {
   useEffect(() => {
     const confirmEmail = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/confirm-email?token=${token}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/confirm-email?token=${token}`);
         const data = await res.json();
         if (res.ok) {
           setStatus("Your email has been successfully confirmed. You can now log in.");
@@ -21,7 +21,7 @@ export default function ConfirmEmailPage() {
         } else {
           setStatus(data.detail || "Invalid or expired confirmation link.");
         }
-      } catch (err) {
+      } catch {
         setStatus("An error occurred while confirming your email.");
       }
     };

@@ -2,71 +2,94 @@
 
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import IntroSekcija from './component/intro'
 import FingerprintInfo from './component/FingerprintInfo'
+import { jwtDecode } from 'jwt-decode'
+import { BACKEND_URL } from '../lib/api'
+import { setPriority } from 'os'
+import UserTabs from './component/tabs'
+import MyFingerprints from './component/MyFingerPrints'
 
-interface FingerprintResponse {
-  hash: string
-  timestamp: string
-}
 
 export default function Home() {
-  const [status, setStatus] = useState<string>('')
-  const [data, setData] = useState<FingerprintResponse | null>(null)
+  const [email, setEmail] = useState<string | null>(null)
+  const [name, setName]= useState<string | null>(null)
+  const [token, setToken]= useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState("newFingerprint");
 
-  const handleSend = async () => {
-    setStatus('Pošiljam podatke...')
 
-    const fingerprintData = {
-      userAgent: navigator.userAgent,
-      language: navigator.language,
-      platform: navigator.platform,
-      screen: {
-        width: window.screen.width,
-        height: window.screen.height,
-        colorDepth: window.screen.colorDepth
-      }
-    }
+  useEffect(() => {
+    const token = localStorage.getItem("tracebit_token");
+        if (!token) {
+          setEmail(null);
+          setToken(null)
+          return;
+        }
+        setToken(token);
+        try {
+          const decoded: { email?: string } = jwtDecode(token);
+          setEmail(decoded.email ?? null);
+        } catch {
+          setEmail(null);
+        }
+    
+        // async function inside useEffect
+        async function fetchName() {
+          try {
+            const response = await fetch(`${BACKEND_URL}/api/nametake`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+    
+    
+            if (response.ok) {
+              const data = await response.json();
+              setName(data.name); // assuming backend returns { name: "username" }
+            } else {
+              setName(null);
+            }
+          } catch {
+            setName(null);
+          }
+        }
+    
+        fetchName();
+  }, []);
 
-    try {
-      const res = await fetch('http://localhost:8000/api/fingerprint', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(fingerprintData)
-      })
-
-      const result: FingerprintResponse = await res.json()
-      setData(result)
-      setStatus('Podatki uspešno poslani!')
-    } catch (error) {
-      console.error('Napaka pri pošiljanju:', error)
-      setStatus('Napaka pri pošiljanju.')
-    }
-  }
 
   return (
     <div>
-      <IntroSekcija />
-      <FingerprintInfo />
+      {email ? 
+      (
+        <>
+          <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+           {/* Main content controlled by active tab */}
+            {activeTab === "newFingerprint" && (
+              <div>
+                <div className="flex flex-col justify-center items-center text-center" style={{ paddingTop: "4rem" }}>
+                <div className="text-4xl font-bold mb-4 text-black">Welcome {name}</div>
+                </div>
+                <IntroSekcija />
+                <FingerprintInfo />
+              </div>
+            )}
 
-      <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <h1 className="text-3xl font-bold mb-6">TraceBit – Zbiranje Fingerprint podatkov</h1>
-        <button
-          onClick={handleSend}
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-        >
-          Pošlji podatke
-        </button>
-        <p className="mt-4 text-lg">{status}</p>
-        {data && (
-          <pre className="mt-6 p-4 bg-gray-100 rounded max-w-xl w-full text-sm overflow-auto">
-            {JSON.stringify(data, null, 2)}
-          </pre>
-        )}
-      </main>
+            {activeTab === "history" && (
+              <MyFingerprints />
+            )}
+        </>
+      ) :
+      (
+      <>
+        <IntroSekcija />
+        <FingerprintInfo />
+      </>
+      )
+      }
+      
     </div>
   )
 }

@@ -5,29 +5,66 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
+import { BACKEND_URL } from 'MajstorL/lib/api'
 
-export default function Navbar() {
+export default function Navbar() {  
   const [email, setEmail] = useState<string | null>(null)
+  const [name, setName]= useState<string | null>(null)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('tracebit_token')
-    if (token) {
-      try {
-        const decoded: { email?: string } = jwtDecode(token)
-        setEmail(decoded.email ?? null)
-      } catch {
-        setEmail(null)
+    function updateAuth() {
+      const token = localStorage.getItem("tracebit_token");
+      if (!token) {
+        setEmail(null);
+        return;
       }
+
+      try {
+        const decoded: { email?: string } = jwtDecode(token);
+        setEmail(decoded.email ?? null);
+      } catch {
+        setEmail(null);
+      }
+
+      // async function inside useEffect
+      async function fetchName() {
+        try {
+          const response = await fetch(`${BACKEND_URL}/api/nametake`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+
+          if (response.ok) {
+            const data = await response.json();
+            setName(data.name); // assuming backend returns { name: "username" }
+          } else {
+            setName(null);
+          }
+        } catch {
+          setName(null);
+        }
+      }
+
+      fetchName();
     }
-  }, [])
+    updateAuth();
+
+    window.addEventListener("storageChanged", updateAuth);
+    return () => window.removeEventListener("storageChanged", updateAuth);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('tracebit_token')
     window.location.href = '/'
   }
 
+  
   return (
-    <nav className="flex justify-between items-center px-6 py-4 shadow-sm bg-gray-800">
+    <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 shadow-sm bg-gray-800">
       <div className="font-bold text-lg text-white">
         <Link href="/">TraceBit</Link>
       </div>
@@ -35,12 +72,45 @@ export default function Navbar() {
         <Link href="/podatki" className="text-blue-400">Data</Link>
         {email ? (
           <div className="flex items-center space-x-2">
-            <span className="text-white text-sm hidden md:inline">{email}</span>
+            <span className="text-white text-sm hidden md:inline">{name}</span>
+            <div>
+              <button
+                onClick={() => setOpen(!open)}
+                className="text-white text-xl focus:outline-none"
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : "false"}
+              >
+                👤
+              </button>
+              {open && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg text-white z-10">
+
+                  <Link href="/account-details" className="block w-full text-left px-4 py-2 hover:text-blue-500 hover:underline cursor-pointer font-medium">
+                    Account details
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      handleLogout();
+                    }}
+                    className="block w-full text-left px-4 py-2 hover:bg-red-400 hover:text-blue-500 hover:underline cursor-pointer font-medium"
+                  >
+                    Logout
+                  </button>
+
+                </div>
+              )}
+            </div>
+            
+            {/**
             <button onClick={handleLogout} className="text-red-400 text-sm">Logout</button>
             <span className="text-white text-xl">👤</span>
+             */}
+            
           </div>
         ) : (
-          <Link href="/admin/login" className="text-blue-400">Login</Link>
+          <Link href="/login" className="text-blue-400">Login</Link>
         )}
       </div>
     </nav>

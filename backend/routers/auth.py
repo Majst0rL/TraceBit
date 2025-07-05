@@ -1,6 +1,6 @@
 #C:\UNI\DProject\tracebit\TraceBit\backend\routers\auth.py
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Header, Request
 from pydantic import BaseModel, EmailStr
 from supabase import create_client, Client
 from fastapi.responses import StreamingResponse
@@ -15,6 +15,8 @@ from io import BytesIO
 from dotenv import load_dotenv
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from urllib.parse import urlencode
+
+
 
 load_dotenv()
 
@@ -239,3 +241,57 @@ def confirm_reset_password(data: ResetPasswordConfirm):
     }).eq("email", data.email).execute()
 
     return {"message": "Password has been reset successfully."}
+
+
+
+@router.get("/nametake")
+def get_username(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        response = supabase.table("users").select("username").eq("email", email).execute()
+        user_data = response.data
+
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+        username = user_data[0]["username"]
+        return {"name": username}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=400, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=400, detail="Invalid token.")
+
+
+@router.get("/fingerprints/my")
+async def get_my_fingerprints(request: Request):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid Authorization header")
+
+    token = auth_header.split(" ")[1]
+
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        user_id = payload.get("user_id")
+        
+        if not user_id:
+            raise HTTPException(status_code=401, detail="User ID not found in token")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    # Query Supabase for fingerprints for this user_id
+    response = supabase.table("fingerprints").select("*").eq("user_id", user_id).execute()
+
+
+    return response.data

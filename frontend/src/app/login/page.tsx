@@ -31,7 +31,8 @@ export default function LoginPage() {
         if (data.role === 'admin') {
           router.push('/admin')
         } else {
-          router.push('/dashboard')
+          window.dispatchEvent(new Event("storageChanged"));
+          router.push('/')
         }
       } else {
         setError(data.detail || 'Login failed.')

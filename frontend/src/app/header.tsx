@@ -6,6 +6,9 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { BACKEND_URL } from 'MajstorL/lib/api'
+import { User } from 'lucide-react';
+
+
 
 export default function Navbar() {  
   const [email, setEmail] = useState<string | null>(null)
@@ -76,12 +79,13 @@ export default function Navbar() {
             <div>
               <button
                 onClick={() => setOpen(!open)}
-                className="text-white text-xl focus:outline-none"
+                className="p-2 rounded-full bg-gray-700 hover:bg-gray-600 hover:shadow-lg text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : "false"}
               >
-                👤
+                <User className="w-6 h-6" />
               </button>
+
               {open && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg text-white z-10">
 

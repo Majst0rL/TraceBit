@@ -1,5 +1,3 @@
-// C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\admin\page.tsx
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -50,16 +48,29 @@ export default function AdminPage() {
 
     const headers = { Authorization: `Bearer ${token}` }
 
-    Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/stats`, { headers }).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/fingerprints`, { headers }).then(res => res.json()),
-      fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/anomalies/month`, { headers }).then(res => res.json())
-    ])
-      .then(([statsData, fingerprintsData, anomalyChartData]) => {
-        setStats(statsData)
-        setFingerprints(fingerprintsData)
-        setAnomalyData(anomalyChartData)
-        setLoading(false)
+    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/getuser`, { headers })
+      .then(res => res.json())
+      .then(user => {
+        if (user?.role !== 'admin') {
+          router.push('/')
+          return
+        }
+
+        Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/stats`, { headers }).then(res => res.json()),
+          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/fingerprints`, { headers }).then(res => res.json()),
+          fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/anomalies/month`, { headers }).then(res => res.json())
+        ])
+          .then(([statsData, fingerprintsData, anomalyChartData]) => {
+            setStats(statsData)
+            setFingerprints(fingerprintsData)
+            setAnomalyData(anomalyChartData)
+            setLoading(false)
+          })
+          .catch(() => {
+            localStorage.removeItem('tracebit_token')
+            router.push('/admin/login')
+          })
       })
       .catch(() => {
         localStorage.removeItem('tracebit_token')
@@ -67,15 +78,14 @@ export default function AdminPage() {
       })
   }, [router])
 
-  // Export all fingerprint data to CSV
   function exportToCsv(fps: FingerprintEntry[]) {
     if (!fps.length) return
     const header = Object.keys(fps[0])
     const rows = fps.map(fp =>
-      header.map(h => `"${(fp[h] ?? '').toString().replace(/"/g, '""')}"`).join(",")
+      header.map(h => `"${(fp[h] ?? '').toString().replace(/"/g, '""')}"`).join(',')
     )
-    const csv = [header.join(","), ...rows].join("\r\n")
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
+    const csv = [header.join(','), ...rows].join('\r\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
     saveAs(blob, `tracebit_fingerprints_${new Date().toISOString().slice(0, 10)}.csv`)
   }
 
@@ -89,7 +99,6 @@ export default function AdminPage() {
 
       {stats && <StatsCards stats={stats} />}
 
-      {/* CSV Export Button */}
       <button
         className="mb-6 mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => exportToCsv(fingerprints)}
@@ -97,25 +106,19 @@ export default function AdminPage() {
         Export all as CSV
       </button>
 
-      {/* Suspicious Activity Chart */}
       <div className="bg-white p-4 rounded shadow mb-8 max-w-2xl">
         <h3 className="font-bold mb-4">Suspicious fingerprints (last 30 days)</h3>
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={anomalyData}>
             <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-            <YAxis
-              allowDecimals={false}
-              domain={[0, (dataMax: number) => Math.ceil(dataMax + 1)]}
-            />
+            <YAxis allowDecimals={false} domain={[0, (dataMax: number) => Math.ceil(dataMax + 1)]} />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
             <Bar dataKey="anomalies" fill="#e53e3e" />
           </BarChart>
         </ResponsiveContainer>
-
       </div>
 
-      {/* Recent Fingerprints Table */}
       <h2 className="text-xl font-semibold mt-10 mb-4">Recent fingerprints</h2>
       <FingerprintTable data={fingerprints.slice(0, 10)} />
     </main>

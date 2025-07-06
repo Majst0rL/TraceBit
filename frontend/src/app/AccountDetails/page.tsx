@@ -78,8 +78,13 @@ export default function AccountDetailsPage() {
       setProfile((prev) => ({ ...prev, [id]: value }))
     }
     if (id === 'autosend') {
-      if (!checked) setProfile((prev) => ({ ...prev, autosend: false }))
-      else setShowModal(true)
+      if (checked) {
+        setShowModal(true)
+      } else {
+        setProfile((prev) => ({ ...prev, autosend: false }))
+      }
+      // Do not update autosend directly here when enabling; wait for modal confirmation
+      return
     }
     if (id === 'oldPassword') setPasswords((prev) => ({ ...prev, old: value }))
     if (id === 'password') setPasswords((prev) => ({ ...prev, new: value }))

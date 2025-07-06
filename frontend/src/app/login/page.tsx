@@ -30,6 +30,7 @@ export default function LoginPage() {
         localStorage.setItem('tracebit_token', data.access_token)
 
         if (data.role === 'admin') {
+          window.dispatchEvent(new Event("storageChanged"));
           router.push('/admin')
         } else {
           window.dispatchEvent(new Event("storageChanged"));

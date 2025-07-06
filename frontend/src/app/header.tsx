@@ -14,45 +14,44 @@ export default function Navbar() {
   const [email, setEmail] = useState<string | null>(null)
   const [name, setName]= useState<string | null>(null)
   const [open, setOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<string | null>("user");
 
   useEffect(() => {
     function updateAuth() {
-      const token = localStorage.getItem("tracebit_token");
-      if (!token) {
+      const localToken = localStorage.getItem("tracebit_token");
+      if (!localToken) {
         setEmail(null);
         return;
       }
 
       try {
-        const decoded: { email?: string } = jwtDecode(token);
+        const decoded: { email?: string } = jwtDecode(localToken);
         setEmail(decoded.email ?? null);
       } catch {
         setEmail(null);
       }
 
-      // async function inside useEffect
-      async function fetchName() {
+      async function getUser() {
         try {
-          const response = await fetch(`${BACKEND_URL}/api/nametake`, {
+        const response = await fetch(`${BACKEND_URL}/api/getuser`, {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${localToken}`,
             },
-          });
-
-
-          if (response.ok) {
+        });
+        if (response.ok) {
             const data = await response.json();
-            setName(data.name); // assuming backend returns { name: "username" }
-          } else {
-            setName(null);
-          }
-        } catch {
-          setName(null);
+            setName(data.username);
+            setIsAdmin(data.role);
+        } else {
+            setName("");
         }
-      }
+        } catch {
+        setName("");
+        }
+    }
 
-      fetchName();
+    getUser();
     }
     updateAuth();
 
@@ -68,11 +67,23 @@ export default function Navbar() {
   
   return (
     <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 shadow-sm bg-gray-800">
-      <div className="font-bold text-lg text-white">
-        <Link href="/">TraceBit</Link>
-      </div>
+      
+      {isAdmin === "admin" ? (
+        <div className="font-bold text-lg text-white">
+          TraceBit
+        </div>
+        ) : (
+        <div className="font-bold text-lg text-white">
+          <Link href="/">TraceBit</Link>
+        </div>
+        )
+      }
+
       <div className="space-x-6 flex items-center">
+        {isAdmin !== "admin" ? (
         <Link href="/podatki" className="text-blue-400">Data</Link>
+        ) : (null) 
+        }
         {email ? (
           <div className="flex items-center space-x-2">
             <span className="text-white text-sm hidden md:inline">{name}</span>
@@ -83,7 +94,7 @@ export default function Navbar() {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : "false"}
               >
-                <User className="w-6 h-6" />
+                <User className="w-4 h-4" />
               </button>
 
               {open && (
@@ -110,13 +121,14 @@ export default function Navbar() {
             {/**
             <button onClick={handleLogout} className="text-red-400 text-sm">Logout</button>
             <span className="text-white text-xl">👤</span>
-             */}
+            */}
             
           </div>
         ) : (
           <Link href="/login" className="text-blue-400">Login</Link>
         )}
       </div>
+      
     </nav>
   )
 }

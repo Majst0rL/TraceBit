@@ -14,6 +14,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const pathname = usePathname(); // 👈 get current route
+  const [isAdmin, setIsAdmin] = useState<string | null>("user");
 
   useEffect(() => {
     const checkAuth = () => {
@@ -30,26 +31,27 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         setEmail(null);
       }
 
-      async function fetchName() {
+      async function getUser() {
         try {
-          const response = await fetch(`${BACKEND_URL}/api/nametake`, {
+        const response = await fetch(`${BACKEND_URL}/api/getuser`, {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${localToken}`,
+            Authorization: `Bearer ${localToken}`,
             },
-          });
-          if (response.ok) {
+        });
+        if (response.ok) {
             const data = await response.json();
-            setName(data.name);
-          } else {
-            setName(null);
-          }
-        } catch {
-          setName(null);
+            setName(data.username);
+            setIsAdmin(data.role);
+        } else {
+            setName("");
         }
-      }
+        } catch {
+        setName("");
+        }
+    }
 
-      fetchName();
+    getUser();
     };
 
     checkAuth();
@@ -64,26 +66,29 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <>
-      {email ? (
-        <div style={{ paddingTop: "4rem" }}>
-          <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-          {activeTab === "newFingerprint" && (
-            <>
-                {isHome ? (<div>
-                <div className="flex flex-col justify-center items-center text-center">
-                    <div className="text-4xl font-bold mb-4 text-black">Welcome {name}</div>
-                </div>
-                <IntroSekcija />
-                <FingerprintInfo />
+    {isAdmin !== "admin" ? (
+        <>
+            {email ? (
+                <div style={{ paddingTop: "4rem" }}>
+                <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+                {activeTab === "newFingerprint" && (
+                    <>
+                        {isHome ? (<div>
+                            <div className="flex flex-col justify-center items-center text-center">
+                                <div className="text-4xl font-bold mb-4 text-black">Welcome {name}</div>
+                            </div>
+                            <IntroSekcija />
+                            <FingerprintInfo />
+                            </div>
+                        ) : null}
+                    </>
+                )}
+                {activeTab === "history" && (isHome ? <MyFingerprints /> : null)}
                 </div>
             ) : null}
-            </>
-          )}
-          {activeTab === "history" && (isHome ? <MyFingerprints /> : null)}
-        </div>
-      ) : null}
-
-      <main className="flex-grow mt-16">{children}</main>
+            <main className="flex-grow mt-16">{children}</main>
+        </>
+    ) : (<main className="flex-grow mt-16">{children}</main>)}
     </>
   );
 }

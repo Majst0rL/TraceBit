@@ -73,7 +73,7 @@ export default function AccountDetailsPage() {
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { id, value, type, checked } = e.target
+    const { id, value, checked } = e.target
     if (['full_name', 'username'].includes(id)) {
       setProfile((prev) => ({ ...prev, [id]: value }))
     }

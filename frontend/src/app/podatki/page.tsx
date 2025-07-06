@@ -7,7 +7,6 @@ import { collectFingerprintData, FingerprintData } from '../utils/fingerprintCol
 import RenderJsonAsForm from '../component/JSONkotForma';
 import { BACKEND_URL } from '../../lib/api';
 import Link from 'next/link';
-import { jwtDecode } from 'jwt-decode';
 
 interface FingerprintResponse {
   status: string;

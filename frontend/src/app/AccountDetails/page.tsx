@@ -114,10 +114,8 @@ export default function AccountDetailsPage() {
             });
 
             if (response.ok) {
-                const data = await response.json();
                 setNameMessage("Name updated successfully!");
                 setNameMessageType("success");
-                setOgName(fullName);
             } else {
                 const errorData = await response.json();
                 setNameMessage(`Error: ${errorData.detail || "Failed to update name."}`);
@@ -157,10 +155,8 @@ export default function AccountDetailsPage() {
             });
 
             if (response.ok) {
-                const data = await response.json();
                 setUsernameMessage("Username updated successfully!");
                 setUsernameMessageType("success");
-                setOgUsername(username);
             } else {
                 const errorData = await response.json();
                 setUsernameMessage(`Error: ${errorData.detail || "Failed to update username."}`);

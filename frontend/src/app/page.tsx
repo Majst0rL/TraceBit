@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <div>
       {email ? (
-        <>
+        <div>
           <UserTabs activeTab={activeTab} setActiveTab={setActiveTab} />
           {/* Main content controlled by active tab */}
           {activeTab === "newFingerprint" && (
@@ -69,12 +69,12 @@ export default function Home() {
           {activeTab === "history" && (
             <MyFingerprints />
           )}
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           <IntroSekcija />
           <FingerprintInfo />
-        </>
+        </div>
       )}
     </div>
   )

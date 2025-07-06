@@ -2,11 +2,12 @@
 
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { collectFingerprintData, FingerprintData } from '../utils/fingerprintCollector';
 import RenderJsonAsForm from '../component/JSONkotForma';
 import { BACKEND_URL } from '../../lib/api';
 import Link from 'next/link';
+import { jwtDecode } from 'jwt-decode';
 
 interface FingerprintResponse {
   status: string;
@@ -19,9 +20,50 @@ export default function UserData() {
   const [response, setResponse] = useState<FingerprintResponse | null>(null);
   const [fingerprintData, setFingerprintData] = useState<FingerprintData | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState<string | null>(null);;
+  const [autoSendEnabled, setAutoSendEnabled] = useState(false);
 
-  const sendData = async () => {
-    const data = fingerprintData;
+
+  useEffect(() => {
+      const localToken = localStorage.getItem("tracebit_token");
+      
+      
+      async function getUser() {
+          try {
+            const response = await fetch(`${BACKEND_URL}/api/getuser`, {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${localToken}`,
+              },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              setId(data.id||null); // assuming you have setId state setter
+              setAutoSendEnabled(data.autosend || false); // assuming autosend is part of the user data
+            } else {
+              // Optionally handle server errors here
+              console.error("Failed to fetch user data", response.status);
+            }
+          } catch (error) {
+            // Network or unexpected error
+            console.error("Network error while fetching user data", error);
+          }
+      }
+      if(localToken){
+        getUser();
+      }
+      }, []);
+
+
+
+  const sendData = async (dataToSend?: typeof fingerprintData) => {
+
+    const data = {
+      ...(dataToSend || fingerprintData),
+      user_id:id||null,
+    };
+
     try {
       const res = await fetch(`${BACKEND_URL}/api/fingerprint`, {
         method: 'POST',
@@ -42,6 +84,11 @@ export default function UserData() {
     setIsProfilingStarted(true);
     const data = collectFingerprintData();
     setFingerprintData(data);
+    if(!autoSendEnabled){
+      return
+    }
+    
+    sendData(data);
   };
 
   const handleSendClick = () => {
@@ -76,12 +123,13 @@ export default function UserData() {
                 </>
               )}
 
-              <button
+              {!autoSendEnabled && (<button
                 onClick={handleSendClick}
                 className="bg-indigo-600 text-white px-6 py-3 rounded-lg mt-6"
               >
                 Send Data to Server
-              </button>
+              </button>)}
+              
 
               {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -90,7 +138,7 @@ export default function UserData() {
                     <p className="mb-4">
                       By sending this data, you agree to our{' '}
                       <Link
-                        href="/terms_and_conditions"
+                        href="/pages/terms_and_conditions"
                         className="text-blue-600 underline"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -106,7 +154,7 @@ export default function UserData() {
                         Cancel
                       </button>
                       <button
-                        onClick={sendData}
+                        onClick={() => sendData()}
                         className="px-4 py-2 bg-indigo-600 text-white rounded"
                       >
                         Confirm & Send

@@ -21,7 +21,7 @@ def is_fingerprint_unique(fingerprint_hash: str) -> bool:
     result = supabase.table("fingerprints").select("id").eq("fingerprint_hash", fingerprint_hash).execute()
     return len(result.data) == 0
 
-def save_fingerprint(data: dict, fingerprint_hash: str):
+def save_fingerprint(data: dict, fingerprint_hash: str, user_id: int | None = None):
     resolution = data.get("screen", {})
     prepared = {
         "fingerprint_hash": fingerprint_hash,
@@ -31,5 +31,7 @@ def save_fingerprint(data: dict, fingerprint_hash: str):
         "gpu_renderer": data.get("webGL", {}).get("renderer"),
         "screen_resolution": f"{resolution.get('width')}x{resolution.get('height')}",
         "features": json.dumps(data.get("capabilities", {})),
+        "user_id": user_id,
     }
+    
     supabase.table("fingerprints").insert(prepared).execute()

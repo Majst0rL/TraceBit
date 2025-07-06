@@ -129,9 +129,10 @@ def confirm_email(token: str):
 # === Login route ===
 @router.post("/login")
 def login(data: LoginInput):
+    
     result = supabase.table("users").select("*").eq("email", data.email).limit(1).execute()
     user = result.data[0] if result.data else None
-
+    
     if not user or not bcrypt.checkpw(data.password.encode(), user["password_hash"].encode()):
         raise HTTPException(status_code=401, detail="Incorrect email or password.")
 
@@ -295,3 +296,195 @@ async def get_my_fingerprints(request: Request):
 
 
     return response.data
+
+@router.get("/getuser")
+def get_username(authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        response = supabase.table("users").select("*").eq("email", email).execute()
+        user_data = response.data
+
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+
+        return user_data[0]
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=400, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=400, detail="Invalid token.")
+    
+
+class UsernameUpdateRequest(BaseModel):
+    username: str
+
+@router.post("/update-username")
+def update_username(
+    request: UsernameUpdateRequest,
+    authorization: str = Header(None)
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        # Fetch user by email
+        response = supabase.table("users").select("*").eq("email", email).execute()
+        user_data = response.data
+
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found.")
+        # Update username in DB
+        update_response = supabase.table("users").update({"username": request.username}).eq("email", email).execute()
+        
+        if not update_response.data:
+            raise HTTPException(status_code=400, detail="Failed to update username.")
+
+        return {"message": "Username updated successfully", "username": request.username}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+    
+class NameUpdateRequest(BaseModel):
+    full_name: str
+
+@router.post("/update-name")
+def update_name(
+    request: NameUpdateRequest,
+    authorization: str = Header(None)
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        # Fetch user by email
+        response = supabase.table("users").select("*").eq("email", email).execute()
+        user_data = response.data
+
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found.")
+        # Update full_name in DB
+        update_response = supabase.table("users").update({"full_name": request.full_name}).eq("email", email).execute()
+        
+        if not update_response.data:
+            raise HTTPException(status_code=400, detail="Failed to update Name.")
+
+        return {"message": "Name updated successfully", "full_name": request.full_name}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+    
+
+class PasswordUpdateRequest(BaseModel):
+    password: str
+    old_password: str
+
+@router.post("/update-password")
+def update_password(
+    request: PasswordUpdateRequest,
+    authorization: str = Header(None)
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        # Fetch user by email
+        response = supabase.table("users").select("*").eq("email", email).limit(1).execute()
+        users = response.data
+
+        if not users or len(users) == 0:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+        user = users[0]
+
+        # Check old password
+        if not bcrypt.checkpw(request.old_password.encode(), user["password_hash"].encode()):
+            raise HTTPException(status_code=401, detail="Incorrect old password.")
+
+        # Hash the new password
+        password_hash = bcrypt.hashpw(request.password.encode(), bcrypt.gensalt()).decode()
+
+        # Update the password in the database
+        update_response = supabase.table("users").update({"password_hash": password_hash}).eq("email", email).execute()
+
+        if not update_response.data:
+            raise HTTPException(status_code=400, detail="Failed to update password.")
+
+        return {"message": "Password updated successfully"}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+    
+
+
+class AutosendUpdateRequest(BaseModel):
+    autosend: bool
+
+@router.post("/autosend")
+def update_password(
+    request: AutosendUpdateRequest,
+    authorization: str = Header(None)
+):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ")[1]
+    try:
+        decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        email = decoded.get("email")
+        if not email:
+            raise HTTPException(status_code=400, detail="Invalid token.")
+
+        # Fetch user by email
+        response = supabase.table("users").select("*").eq("email", email).limit(1).execute()
+        user_data = response.data
+
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found.")
+
+        # Update autosend in the database
+        update_response = supabase.table("users").update({"autosend":request.autosend}).eq("email", email).execute()
+
+        if not update_response.data:
+            raise HTTPException(status_code=400, detail="Failed to update autosend.")
+
+        return {"message": "Autosend updated successfully"}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+    
+

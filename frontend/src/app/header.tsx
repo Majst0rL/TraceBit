@@ -85,8 +85,8 @@ export default function Navbar() {
               {open && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded shadow-lg text-white z-10">
 
-                  <Link href="/account-details" className="block w-full text-left px-4 py-2 hover:text-blue-500 hover:underline cursor-pointer font-medium">
-                    Account details
+                  <Link href="/AccountDetails" className="block w-full text-left px-4 py-2 hover:text-blue-500 hover:underline cursor-pointer font-medium">
+                    Account
                   </Link>
 
                   <button

@@ -10,8 +10,33 @@ import Link from 'next/link';
 
 interface FingerprintResponse {
   status: string;
-  message: string;
-  data: FingerprintData;
+  unique?: boolean;
+  hash?: string;
+  suspicious?: boolean;
+  suspicious_reason?: string;
+}
+
+//BASIC SUSPICIOUS CHECK
+function isFingerprintSuspiciousLocal(data: FingerprintData): { suspicious: boolean, reason: string } {
+  const os = data?.parsedUserAgent?.os || "";
+  const browser = data?.parsedUserAgent?.browser || "";
+  if ((os.startsWith("Windows") && browser.includes("Safari")) ||
+      (os.startsWith("Linux") && browser.includes("Edge"))) {
+    return { suspicious: true, reason: "Unusual OS/Browser combination" };
+  }
+  const ua = (data?.parsedUserAgent?.fullUserAgent || "").toLowerCase();
+  if (["headless", "phantomjs", "selenium", "puppeteer"].some(w => ua.includes(w))) {
+    return { suspicious: true, reason: "Automation tool detected in user agent" };
+  }
+  const res = `${data?.screen?.width}x${data?.screen?.height}`;
+  if (["0x0", "1x1", "10000x10000"].includes(res)) {
+    return { suspicious: true, reason: "Unusual screen resolution" };
+  }
+  const renderer = (data?.webGL?.renderer || "").toLowerCase();
+  if (["llvmpipe", "swiftshader", "software"].some(w => renderer.includes(w))) {
+    return { suspicious: true, reason: "Suspicious GPU renderer" };
+  }
+  return { suspicious: false, reason: "" };
 }
 
 export default function UserData() {
@@ -19,48 +44,41 @@ export default function UserData() {
   const [response, setResponse] = useState<FingerprintResponse | null>(null);
   const [fingerprintData, setFingerprintData] = useState<FingerprintData | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [id, setId] = useState<string | null>(null);;
+  const [id, setId] = useState<string | null>(null);
   const [autoSendEnabled, setAutoSendEnabled] = useState(false);
 
-
   useEffect(() => {
-      const localToken = localStorage.getItem("tracebit_token");
-      
-      
-      async function getUser() {
-          try {
-            const response = await fetch(`${BACKEND_URL}/api/getuser`, {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${localToken}`,
-              },
-            });
+    const localToken = localStorage.getItem("tracebit_token");
 
-            if (response.ok) {
-              const data = await response.json();
-              setId(data.id||null); // assuming you have setId state setter
-              setAutoSendEnabled(data.autosend || false); // assuming autosend is part of the user data
-            } else {
-              // Optionally handle server errors here
-              console.error("Failed to fetch user data", response.status);
-            }
-          } catch (error) {
-            // Network or unexpected error
-            console.error("Network error while fetching user data", error);
-          }
+    // If the user is logged in, fetch their ID and auto-send preference
+    async function getUser() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/getuser`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setId(data.id || null);
+          setAutoSendEnabled(data.autosend || false);
+        }
+      } catch {
+        // ignore
       }
-      if(localToken){
-        getUser();
-      }
-      }, []);
+    }
+    if(localToken){
+      getUser();
+    }
+  }, []);
 
-
-
+  // Send collected fingerprint data to backend
   const sendData = async (dataToSend?: typeof fingerprintData) => {
-
     const data = {
       ...(dataToSend || fingerprintData),
-      user_id:id||null,
+      user_id: id || null,
     };
 
     try {
@@ -79,6 +97,7 @@ export default function UserData() {
     }
   };
 
+  // Handle "Start Profiling" click
   const handleProfiling = () => {
     setIsProfilingStarted(true);
     const data = collectFingerprintData();
@@ -86,10 +105,10 @@ export default function UserData() {
     if(!autoSendEnabled){
       return
     }
-    
     sendData(data);
   };
 
+  // Show confirmation modal for sending data
   const handleSendClick = () => {
     setShowModal(true);
   };
@@ -98,6 +117,14 @@ export default function UserData() {
     <div>
       <section className="text-center py-20 px-4">
         <h2 className="text-2xl font-bold mb-6">Browser Fingerprint Data</h2>
+
+        {/* Notice for unauthenticated users */}
+        {!id && (
+          <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-800 rounded">
+            <b>Notice:</b> Since you are not logged in, the suspicious fingerprint check uses only basic local rules.<br />
+            For full advanced analysis, please <Link href="/login" className="underline text-blue-700">log in</Link>.
+          </div>
+        )}
 
         <button
           onClick={handleProfiling}
@@ -110,7 +137,6 @@ export default function UserData() {
           {isProfilingStarted ? (
             <div>
               <p className="mb-4">Collected data:</p>
-
               {fingerprintData && (
                 <>
                   {fingerprintData.parsedUserAgent.fullUserAgent && (
@@ -119,17 +145,35 @@ export default function UserData() {
                     </pre>
                   )}
                   <RenderJsonAsForm data={fingerprintData} />
+
+                  {/* Suspicious check for unauthenticated users */}
+                  {!id && (() => {
+                    const { suspicious, reason } = isFingerprintSuspiciousLocal(fingerprintData);
+                    return suspicious ? (
+                      <div className="mt-6 p-4 bg-red-200 border border-red-500 text-red-800 rounded">
+                        <b>Warning:</b> This fingerprint appears <b>suspicious</b>.<br />
+                        Reason: {reason}
+                      </div>
+                    ) : (
+                      <div className="mt-6 p-4 bg-green-100 border border-green-400 text-green-900 rounded">
+                        This fingerprint appears <b>normal</b> (no suspicion detected).
+                      </div>
+                    );
+                  })()}
                 </>
               )}
 
-              {!autoSendEnabled && (<button
-                onClick={handleSendClick}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-lg mt-6"
-              >
-                Send Data to Server
-              </button>)}
-              
+              {/* Send data to server only if auto-send is not enabled */}
+              {!autoSendEnabled && (
+                <button
+                  onClick={handleSendClick}
+                  className="bg-indigo-600 text-white px-6 py-3 rounded-lg mt-6"
+                >
+                  Send Data to Server
+                </button>
+              )}
 
+              {/* Modal for confirmation before sending data */}
               {showModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                   <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-left">
@@ -163,11 +207,20 @@ export default function UserData() {
                 </div>
               )}
 
+              {/* Show server response for authenticated users */}
               {response && (
                 <div className="mt-6 p-4 bg-gray-200 rounded-lg">
                   <h3 className="font-semibold">Server Response:</h3>
                   {response.status === 'ok'
-                    ? 'Data successfully sent.'
+                    ? <>
+                        Data successfully sent.
+                        {response.suspicious && (
+                          <div className="mt-4 p-3 bg-red-200 border border-red-500 text-red-800 rounded">
+                            <b>Warning:</b> This fingerprint appears <b>suspicious</b>.<br />
+                            Reason: {response.suspicious_reason}
+                          </div>
+                        )}
+                      </>
                     : 'Error: Something went wrong.'}
                 </div>
               )}

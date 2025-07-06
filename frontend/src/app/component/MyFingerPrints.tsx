@@ -12,6 +12,8 @@ interface FingerprintEntry {
   os_name: string
   gpu_renderer: string
   screen_resolution: string
+  suspicious?: boolean
+  suspicious_reason?: string
 }
 
 export default function MyFingerprints() {

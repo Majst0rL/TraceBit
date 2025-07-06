@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { BACKEND_URL } from 'MajstorL/lib/api'
 
-export default function Navbar() {  
+export default function Navbar() {
   const [email, setEmail] = useState<string | null>(null)
-  const [name, setName]= useState<string | null>(null)
+  const [name, setName] = useState<string | null>(null)
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function Navbar() {
     window.location.href = '/'
   }
 
-  
+
   return (
     <nav className="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 shadow-sm bg-gray-800">
       <div className="font-bold text-lg text-white">
@@ -102,12 +102,12 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            
+
             {/**
             <button onClick={handleLogout} className="text-red-400 text-sm">Logout</button>
             <span className="text-white text-xl">👤</span>
              */}
-            
+
           </div>
         ) : (
           <Link href="/login" className="text-blue-400">Login</Link>

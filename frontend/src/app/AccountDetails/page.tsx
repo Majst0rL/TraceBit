@@ -121,7 +121,7 @@ export default function AccountDetailsPage() {
                 setNameMessage(`Error: ${errorData.detail || "Failed to update name."}`);
                 setNameMessageType("error");
             }
-            } catch (error) {
+            } catch{
             setNameMessage("Network error: Could not update name.");
             setNameMessageType("error");
             }
@@ -162,7 +162,7 @@ export default function AccountDetailsPage() {
                 setUsernameMessage(`Error: ${errorData.detail || "Failed to update username."}`);
                 setUsernameMessageType("error");
             }
-            } catch (error) {
+            } catch {
             setUsernameMessage("Network error: Could not update username.");
             setUsernameMessageType("error");
             }
@@ -211,7 +211,7 @@ export default function AccountDetailsPage() {
                 setPasswordMessageType("error");
                 return;
             }
-            } catch (error) {
+            } catch {
             setPasswordMessage("Network error: Could not update password.");
             setPasswordMessageType("error");
             }
@@ -276,7 +276,7 @@ export default function AccountDetailsPage() {
             setPasswordMessage(`Error: ${errorData.detail || "Failed to update preference."}`);
             setPasswordMessageType("error");
             }
-        } catch (error) {
+        } catch {
             setPasswordMessage("Network error: Could not update preference.");
             setPasswordMessageType("error");
         }

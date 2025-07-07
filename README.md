@@ -81,8 +81,8 @@ Render omogoča:
   <li>✅ Upravljanje background taskov in async podpore</li>
 </ul>
 
-Backend komunicira s Supabase preko REST/RPC klicev z uporabo:
-•	SUPABASE_URL
+Backend komunicira s Supabase preko REST/RPC klicev z uporabo:<br>
+•	SUPABASE_URL<br>
 •	SUPABASE_SERVICE_KEY
 
 Za varnost se uporablja JWT avtentikacija, podpisana z algoritmom HS256.

@@ -7,7 +7,7 @@ export default function About() {
         <title>About | TraceBit</title>
         <meta name="description" content="Learn about TraceBit, a privacy-focused browser and device fingerprinting service." />
       </Head>
-      <main className="max-w-3xl mx-auto p-6">
+      <main className="max-w-3xl mx-auto p-6 pt-24">
         <h1 className="text-3xl font-bold mb-4">About TraceBit</h1>
 
         <p className="mb-4">

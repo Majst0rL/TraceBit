@@ -7,7 +7,7 @@ export default function AcceptableUsePolicy() {
         <title>Acceptable Use Policy | TraceBit</title>
         <meta name="description" content="Read TraceBits Acceptable Use Policy outlining responsible and ethical usage of our fingerprinting technology." />
       </Head>
-      <main className="max-w-3xl mx-auto p-6">
+      <main className="max-w-3xl mx-auto p-6 pt-24">
         <h1 className="text-3xl font-bold mb-4">Acceptable Use Policy</h1>
         <p className="mb-4">Effective Date: June 1, 2025</p>
 

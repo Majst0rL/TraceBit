@@ -7,7 +7,7 @@ export default function Disclaimer() {
         <title>Legal Disclaimer | TraceBit</title>
         <meta name="description" content="Read the legal disclaimer and liability notice for TraceBits fingerprinting service." />
       </Head>
-      <main className="max-w-3xl mx-auto p-6">
+      <main className="max-w-3xl mx-auto p-6 pt-24">
         <h1 className="text-3xl font-bold mb-4">Legal Disclaimer and Liability Notice</h1>
         <p className="mb-4">Effective Date: June 1, 2025</p>
 

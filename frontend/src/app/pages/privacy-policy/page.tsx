@@ -10,7 +10,7 @@ export default function PrivacyAndCookiePolicy() {
           content="Learn how TraceBit collects, uses, and protects your data including cookies and fingerprinting technologies."
         />
       </Head>
-      <main className="max-w-3xl mx-auto p-6">
+      <main className="max-w-3xl mx-auto p-6 pt-24">
         <h1 className="text-3xl font-bold mb-4">Privacy & Cookie Policy</h1>
         <p className="mb-4">Effective Date: June 1, 2025</p>
 

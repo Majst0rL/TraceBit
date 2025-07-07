@@ -1,57 +1,54 @@
 //C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\login\page.tsx
 
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { BACKEND_URL } from '../../lib/api'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { BACKEND_URL } from '../../lib/api';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [twofaCode, setTwofaCode] = useState('')
-  const [error, setError] = useState('')
-  const router = useRouter()
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [twofaCode, setTwofaCode] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleLogin = async () => {
-    setError('')
-    
-    try {
+    setError('');
 
+    try {
       const res = await fetch(`${BACKEND_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, twofa_code: twofaCode }),
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('tracebit_token', data.access_token)
+        localStorage.setItem('tracebit_token', data.access_token);
+        window.dispatchEvent(new Event('storageChanged'));
 
         if (data.role === 'admin') {
-          window.dispatchEvent(new Event("storageChanged"));
-          router.push('/admin')
+          router.push('/admin');
         } else {
-          window.dispatchEvent(new Event("storageChanged"));
-          router.push('/')
+          router.push('/user');
         }
       } else {
         if (typeof data.detail === 'string') {
-          setError(data.detail)
+          setError(data.detail);
         } else if (Array.isArray(data.detail) && data.detail[0]?.msg) {
-          setError(data.detail[0].msg)
+          setError(data.detail[0].msg);
         } else if (typeof data.detail === 'object' && data.detail?.msg) {
-          setError(data.detail.msg)
+          setError(data.detail.msg);
         } else {
-          setError('Login failed.')
+          setError('Login failed.');
         }
       }
-
     } catch {
-      setError('Network or server error.')
+      setError('Network or server error.');
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
@@ -110,5 +107,5 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -1,3 +1,5 @@
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\layout.tsx
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -30,7 +32,7 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="flex flex-col min-h-screen antialiased">
         <Navbar />
-        <TabProvider> {/* ✅ OVITJE */}
+        <TabProvider>
           <ClientLayout>{children}</ClientLayout>
         </TabProvider>
         <Footer />

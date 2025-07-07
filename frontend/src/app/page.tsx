@@ -1,39 +1,51 @@
-// C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\page.tsx
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\page.tsx
 
 'use client'
 
-import { useEffect, useState } from 'react'
-import IntroSekcija from './component/intro'
-import FingerprintInfo from './component/FingerprintInfo'
-import { jwtDecode } from 'jwt-decode'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-
-  useEffect(() => {
-    const localToken = localStorage.getItem("tracebit_token");
-    if (!localToken) {
-      setIsLoggedIn(false);
-      return;
-    }
-
-    try {
-      const decoded: { email?: string } = jwtDecode(localToken);
-      setIsLoggedIn(!!decoded.email);
-    } catch {
-      setIsLoggedIn(false);
-    }
-  }, []);
-
-  if (isLoggedIn) {
-    return null; // Prijavljeni uporabnik ne vidi nič tukaj
-  }
+  const router = useRouter();
 
   return (
-    <div className="px-4">
-      <IntroSekcija />
-      <FingerprintInfo />
+    <div>
+      <section className="text-center py-10" style={{ backgroundColor: '#ededed' }}>
+        <h1 className="text-4xl font-bold mb-4 text-black">Reveal your digital footprint</h1>
+        <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+          Discover the unique fingerprint your browser leaves behind and understand its impact on your online privacy.
+        </p>
+        <button
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg"
+          onClick={() => router.push('/podatki')}
+        >
+          Analyze your fingerprint
+        </button>
+      </section>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-center">
+        Understanding browser fingerprinting
+      </h2>
+
+      <div className="flex flex-wrap gap-4 mt-4 justify-center">
+        <div className="bg-white rounded p-6 shadow-sm w-96">
+          <strong>What is a browser fingerprint?</strong>
+          <p>
+            A browser fingerprint is a unique profile collected about your device and browser that is used to track your online activity across different websites.
+          </p>
+        </div>
+        <div className="bg-white rounded p-6 shadow-sm w-96">
+          <strong>How it works</strong>
+          <p>
+            It combines data from your browser settings, plugins, screen resolution, fonts, and other configurations to create a unique identification tag.
+          </p>
+        </div>
+        <div className="bg-white rounded p-6 shadow-sm w-96">
+          <strong>Why it matters</strong>
+          <p>
+            A fingerprint can be used for targeted advertising, security purposes, or to link your activity even if you delete cookies.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
-

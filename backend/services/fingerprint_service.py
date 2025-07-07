@@ -37,10 +37,6 @@ def is_fingerprint_suspicious(new_fp: dict, all_fps: list[dict]) -> (bool, str):
     if new_fp.get("screen_resolution") in ["0x0", "1x1", "10000x10000"]:
         return True, "Impossible or rare screen resolution"
 
-    count_same = sum(1 for fp in all_fps if fp.get("fingerprint_hash") == new_fp["fingerprint_hash"])
-    if count_same == 0:
-        return True, "Unique fingerprint never seen before"
-
     renderer = (new_fp.get("gpu_renderer") or "").lower()
     if any(x in renderer for x in ["llvmpipe", "swiftshader", "software"]):
         return True, "Suspicious GPU renderer (VM/Emulator detected)"

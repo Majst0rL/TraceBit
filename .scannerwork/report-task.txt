@@ -1,0 +1,7 @@
+organization=majst0rl
+projectKey=Majst0rL_TraceBit
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.65231
+dashboardUrl=https://sonarcloud.io/dashboard?id=Majst0rL_TraceBit
+ceTaskId=AZfh6wVubAvSba1Gp-Vu
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AZfh6wVubAvSba1Gp-Vu

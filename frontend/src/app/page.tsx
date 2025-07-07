@@ -8,34 +8,32 @@ import FingerprintInfo from './component/FingerprintInfo'
 import { jwtDecode } from 'jwt-decode'
 
 export default function Home() {
-  const [email, setEmail] = useState<string | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     const localToken = localStorage.getItem("tracebit_token");
     if (!localToken) {
-      setEmail(null);
+      setIsLoggedIn(false);
       return;
     }
+
     try {
       const decoded: { email?: string } = jwtDecode(localToken);
-      setEmail(decoded.email ?? null);
+      setIsLoggedIn(!!decoded.email);
     } catch {
-      setEmail(null);
+      setIsLoggedIn(false);
     }
-
-    
   }, []);
 
+  if (isLoggedIn) {
+    return null; // Prijavljeni uporabnik ne vidi nič tukaj
+  }
+
   return (
-    <div>
-      {email ? (
-        null
-      ) : (
-        <div>
-          <IntroSekcija />
-          <FingerprintInfo />
-        </div>
-      )}
+    <div className="px-4">
+      <IntroSekcija />
+      <FingerprintInfo />
     </div>
-  )
+  );
 }
+

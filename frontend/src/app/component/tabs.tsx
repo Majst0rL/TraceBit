@@ -1,15 +1,21 @@
-type UserTabsProps = {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-};
+//C:\UNI\DProject\tracebit\TraceBit\frontend\src\app\component\tabs.tsx
 
-export default function UserTabs({ activeTab, setActiveTab }: UserTabsProps) {
+'use client';
+
+import { useContext } from "react";
+import { TabContext } from "../../context/TabContext";
+
+export default function UserTabs() {
+  const { activeTab, setActiveTab } = useContext(TabContext);
+
+  const tabs = [
+    { id: "newFingerprint", label: "New fingerprint" },
+    { id: "history", label: "Fingerprint history" },
+  ];
+
   return (
     <nav className="flex border-b border-gray-300 mb-6">
-      {[
-        { id: "newFingerprint", label: "New fingeprint" },
-        { id: "history", label: "Fingerprint history" },
-      ].map(({ id, label }) => (
+      {tabs.map(({ id, label }) => (
         <button
           key={id}
           onClick={() => setActiveTab(id)}

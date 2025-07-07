@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "./header";
 import Footer from "./footer";
 import ClientLayout from "./clientlayout";
-
+import { TabProvider } from "../context/TabContext"; // ✅ Dodano!
 
 export const metadata: Metadata = {
   title: "TraceBit",
@@ -30,7 +30,9 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="flex flex-col min-h-screen antialiased">
         <Navbar />
-        <ClientLayout>{children}</ClientLayout>
+        <TabProvider> {/* ✅ OVITJE */}
+          <ClientLayout>{children}</ClientLayout>
+        </TabProvider>
         <Footer />
       </body>
     </html>

@@ -60,10 +60,6 @@ def is_fingerprint_suspicious(new_fp: dict, all_fps: list[dict]) -> (bool, str):
         reasons.append("Unusual OS and browser combination")
         score += 2
 
-    if "chrome" in browser and "applewebkit" in ua and "mac" not in os_name:
-        reasons.append("Chrome with AppleWebKit on non-Mac OS")
-        score += 1
-
     # === Refresh rate anomalies ===
     if refresh_rate is not None:
         if refresh_rate < 30 or refresh_rate > 240:

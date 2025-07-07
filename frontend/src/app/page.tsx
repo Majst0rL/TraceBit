@@ -53,7 +53,7 @@ export default function Home() {
 
   return (
     <div>
-      <section className="text-center py-10" style={{ backgroundColor: '#ededed' }}>
+      <section className="text-center py-10 pt-24" style={{ backgroundColor: '#ededed' }}>
         <h1 className="text-4xl font-bold mb-4 text-black">Reveal your digital footprint</h1>
         <p className="text-gray-600 mb-6 max-w-xl mx-auto">
           Discover the unique fingerprint your browser leaves behind and understand its impact on your online privacy.

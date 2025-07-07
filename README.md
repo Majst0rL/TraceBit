@@ -47,14 +47,10 @@ Aplikacija je zasnovana po modularni arhitekturi z jasno ločitvijo med frontend
 
 
 # Shema Supabase
-<br>
-<br>
 
 ![Slika izgleda supabase sheme](assets/db.png)
 
 # UML Use Case Diagrami
-<br>
-<br>
 
 ![Slika izgleda usecase diagrama](assets/uc.png)
 

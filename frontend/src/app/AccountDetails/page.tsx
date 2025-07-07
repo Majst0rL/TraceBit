@@ -170,7 +170,7 @@ export default function AccountDetailsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-10">
+    <div className="max-w-4xl mx-auto p-6 space-y-10 mt-12">
       <div className="border border-gray-300 rounded-xl p-6 shadow-sm bg-white">
         <h1 className="text-3xl font-bold mb-6">Account Details</h1>
         <form onSubmit={handleSubmit} className="space-y-6">

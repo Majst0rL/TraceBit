@@ -14,8 +14,9 @@ export default function UserTabs() {
     { href: "/user/history", label: "Fingerprint history", activeMatch: /^\/user\/history/ },
   ];
 
-  return (
-    <nav className="flex border-b border-gray-300 mb-6">
+  return ( 
+    <nav className="fixed top-[4rem] z-40 w-full border-b border-gray-300 mb-6 bg-white shadow-sm">
+
       {tabs.map(({ href, label, activeMatch }) => (
         <button
           key={href}

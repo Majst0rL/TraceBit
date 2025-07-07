@@ -4,7 +4,6 @@
 
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { BACKEND_URL } from "MajstorL/lib/api";
 import { usePathname } from "next/navigation";
 import UserTabs from "./component/tabs";
 
@@ -13,34 +12,40 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("tracebit_token");
-    if (!token) {
-      setIsLoggedIn(false);
-      return;
-    }
+    function updateAuth() {
+      const token = localStorage.getItem("tracebit_token");
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
 
-    try {
-      const decoded = jwtDecode<{ email?: string }>(token);
-      if (decoded?.email) {
-        setIsLoggedIn(true);
-      } else {
+      try {
+        const decoded = jwtDecode<{ email?: string }>(token);
+        if (decoded?.email) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch {
         setIsLoggedIn(false);
       }
-    } catch {
-      setIsLoggedIn(false);
     }
+    updateAuth()
+      window.addEventListener('storageChanged', updateAuth)
+      return () => window.removeEventListener('storageChanged', updateAuth)
   }, []);
 
-  const isUserPath = pathname?.startsWith("/user");
+
+  const isUserPath = pathname?.startsWith("/user") || pathname?.startsWith("/podatki");
 
   return (
     <>
       {isLoggedIn && isUserPath && (
-        <div style={{ paddingTop: "4rem" }}>
+        <div style={{ paddingTop: "6rem" }}>
           <UserTabs />
         </div>
       )}
-      <main className="flex-grow mt-16">
+      <main className="flex-grow">
         {children}
       </main>
     </>

@@ -2,10 +2,54 @@
 
 'use client'
 
+import { BACKEND_URL } from 'MajstorL/lib/api';
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const localToken = localStorage.getItem('tracebit_token')
+
+    if (!localToken) {
+      setLoading(false)
+      return
+    }
+
+    async function getUser() {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/getuser`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localToken}`,
+          },
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.role === 'admin') {
+            router.push('/admin')
+          } else {
+            router.push('/user')
+          }
+        } else {
+          // token invalid or no user found - just stop loading and stay on page
+          setLoading(false)
+        }
+      } catch (error) {
+        setLoading(false)
+      }
+    }
+
+    getUser()
+  }, [router])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div>

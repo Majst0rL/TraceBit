@@ -115,7 +115,7 @@ export default function UserData() {
 
   return (
     <div>
-      <section className="text-center py-20 px-4">
+      <section className="text-center pt-8 pb-20 px-4">
         <h2 className="text-2xl font-bold mb-6">Browser Fingerprint Data</h2>
 
         {/* Notice for unauthenticated users */}

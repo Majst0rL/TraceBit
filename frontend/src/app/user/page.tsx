@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export default function UserHome() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState<String | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const localToken = localStorage.getItem('tracebit_token');
@@ -35,7 +35,7 @@ export default function UserHome() {
           // token invalid or no user found - just stop loading and stay on page
           setLoading(false);
         }
-      } catch (error) {
+      } catch {
         setLoading(false);
       }
     }

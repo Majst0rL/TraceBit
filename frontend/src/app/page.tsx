@@ -39,7 +39,7 @@ export default function Home() {
           // token invalid or no user found - just stop loading and stay on page
           setLoading(false)
         }
-      } catch (error) {
+      } catch {
         setLoading(false)
       }
     }

@@ -3,7 +3,6 @@
 'use client';
 
 import { useEffect, useState, useContext } from "react";
-import { usePathname } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { BACKEND_URL } from "MajstorL/lib/api";
 import IntroSekcija from "./component/intro";

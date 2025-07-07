@@ -13,8 +13,7 @@ import MyFingerprints from "./component/MyFingerPrints";
 import { TabContext } from "../context/TabContext";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const { activeTab, setActiveTab } = useContext(TabContext);
+  const { activeTab } = useContext(TabContext);
 
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
@@ -59,9 +58,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     };
   }, []);
 
-  const isHome = pathname === "/";
-
-  // ========== USER LAYOUT ==========
   const renderUserView = () => (
     <>
       {email && (

@@ -68,7 +68,11 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full flex justify-between items-center px-6 py-4 shadow-sm bg-gray-800 z-50">
       {isAdmin === 'admin' ? (
-        <div className="font-bold text-lg text-white">TraceBit</div>
+        <div className="font-bold text-lg text-white">
+          <Link href="/admin" className="hover:text-blue-400">
+              TraceBit
+          </Link>
+        </div>
       ) : (
         <div className="font-bold text-lg text-white">
           {tok ? (
